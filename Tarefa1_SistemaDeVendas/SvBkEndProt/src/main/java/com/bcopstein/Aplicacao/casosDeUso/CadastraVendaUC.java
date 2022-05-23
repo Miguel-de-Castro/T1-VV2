@@ -35,7 +35,12 @@ public class CadastraVendaUC {
           item.getQuantidade()));
     }
 
+    // Erro calculo do frete
     Integer[] valores = servicoVenda.consultaVenda(itens , dto.getEndereco());
+    if(valores[3] == 0){
+      return 3;
+    }
+
     Venda novaVenda = new Venda(valores[0], valores[1], valores[2], itens);
     return servicoVenda.cadastraVenda(novaVenda);
   }

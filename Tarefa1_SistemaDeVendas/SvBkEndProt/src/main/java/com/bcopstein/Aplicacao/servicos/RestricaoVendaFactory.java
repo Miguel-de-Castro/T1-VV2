@@ -9,10 +9,10 @@ public class RestricaoVendaFactory {
   private static final LocalTime HORARIO_FECHAMENTO = LocalTime.of(18, 0, 0);
 
   public static IRestricaoHorarioVenda getInstance(LocalTime horaRestricao) {
-    if (horaRestricao.isAfter(HORARIO_ABERTURA) && horaRestricao.isBefore(HORARIO_FECHAMENTO)) {
+    // if (horaRestricao.isAfter(HORARIO_ABERTURA) && horaRestricao.isBefore(HORARIO_FECHAMENTO)) {
       return new HorarioNormal();
-    } else {
-      return new HorarioFechado();
-    }
+    // } else {
+    //   return new HorarioFechado();
+    // }
   }
 }

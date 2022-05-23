@@ -30,12 +30,12 @@ public class VendaService {
   }
 
   public Integer cadastraVenda(Venda novaVenda) {
-//    IRestricaoHorarioVenda restricaoVenda = RestricaoVendaFactory.getInstance(LocalTime.now());
-//    boolean vendaIsValida = restricaoVenda.vendaIsValida(novaVenda);
-//
-//    if (!vendaIsValida) {
-//      return 1;
-//    }
+    IRestricaoHorarioVenda restricaoVenda = RestricaoVendaFactory.getInstance(LocalTime.now());
+    boolean vendaIsValida = restricaoVenda.vendaIsValida(novaVenda);
+
+    if (!vendaIsValida) {
+      return 1;
+    }
 
     List<ItemCarrinho> produtos = novaVenda.getItensCarrinho();
 
@@ -73,9 +73,9 @@ public class VendaService {
 
     imposto = calculoImposto.calculaImposto(itens);
 
-    if (endereco.equalsIgnoreCase("")){
-        endereco = "portoalegre";
-    }
+//    if (endereco.equalsIgnoreCase("")){
+//        endereco = "portoalegre";
+//    }
 
     try {
       frete = calculoFrete.calculaFrete("portoalegre", endereco);

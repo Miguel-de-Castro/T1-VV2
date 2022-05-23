@@ -23,6 +23,14 @@ class SaidaView {
     this.root.innerHTML = this.icError + " Nao foi possivel concluir sua compra devido ao horario";
   }
 
+  estoqueInvalido() {
+    this.root.innerHTML = this.icError + " Nao foi possivel concluir sua compra devido a falta de estoque";
+  }
+
+  freteInvalido() {
+    this.root.innerHTML = this.icError + " Nao foi possivel concluir sua compra devido ao endereco inserido";
+  }
+
   limpar() {
     this.root.innerHTML = "N&atilde;o h&aacute; nenhuma sa&iacute;da";
   }

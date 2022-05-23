@@ -95,11 +95,17 @@ async function checkout() {
   let confirmou = await servico.confirmaVenda(itens, inpEndereco.value);
 
   console.log(confirmou);
+  console.log(typeof confirmou);
 
-  if (confirmou == 0) {
+  if (confirmou === 0) {
     saida.vendaSucesso();
-  } else if (confirmou == 1) {
+  } else if (confirmou === 1) {
     saida.horarioInvalido();
+  } else if (confirmou === 2) {
+    saida.estoqueInvalido();
+  } else if (confirmou === 3) {
+    console.log("num3");
+    saida.freteInvalido();
   } else {
     saida.erroInternoDoServidor();
   }

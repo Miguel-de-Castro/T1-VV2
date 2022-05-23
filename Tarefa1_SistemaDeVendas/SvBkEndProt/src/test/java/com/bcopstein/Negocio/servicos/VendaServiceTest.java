@@ -1,6 +1,11 @@
 package com.bcopstein.Negocio.servicos;
 
+import com.bcopstein.Adaptadores.controllers.Controller;
+import com.bcopstein.Adaptadores.repositorios.EstoqueRepository;
+import com.bcopstein.Adaptadores.repositorios.IEstoqueRepositoryCrud;
+import com.bcopstein.Aplicacao.casosDeUso.VerificaEstoqueProdutoUC;
 import com.bcopstein.Aplicacao.servicos.HorarioNormal;
+import com.bcopstein.Aplicacao.servicos.ImpostoUm;
 import com.bcopstein.Aplicacao.servicos.RestricaoVendaFactory;
 import com.bcopstein.Negocio.entidades.ItemCarrinho;
 import com.bcopstein.Negocio.entidades.ItemEstoque;
@@ -63,56 +68,6 @@ public class VendaServiceTest {
         vendas = Arrays.asList(venda1,venda2);
     }
 
-    // TODO: fazer o "RestricaoVendaFactory" funcionar com o mockStatic
-    @Test
-    public void canAddVenda(){
-        // GIVEN
-//        try (MockedStatic<RestricaoVendaFactory> theMock = Mockito.mockStatic(RestricaoVendaFactory.class)) {
-//            theMock.when(() -> RestricaoVendaFactory.getInstance(LocalTime.now()))
-//                    .thenReturn(HorarioNormal.class);
-//        }
-
-//        RestricaoVendaFactory restricaoVendaFactory = new RestricaoVendaFactory();
-//        given(RestricaoVendaFactory.getInstance(LocalTime.now())).willReturn(HorarioNormal.class);
-
-        // WHEN
-        for (ItemCarrinho produto : itensCarrinho1) {
-            when(estoqueService.podeVender(produto.getCodProduto(), produto.getQuantidade())).thenReturn(true);
-        }
-
-        for (ItemCarrinho produto : itensCarrinho1) {
-            when(estoqueService.getProduto(produto.getCodProduto())).thenReturn(itemEstoque);
-        }
-
-        // THEN
-        assertEquals(0, vendaService.cadastraVenda(vendas.get(0)));
-    }
-
-    // TODO: fazer o "RestricaoVendaFactory" funcionar com o mockStatic
-    @Test
-    public void canNotAddVendaWithInvalidTime(){
-        // GIVEN
-
-        // WHEN
-
-        // THEN
-//        assertEquals(1, vendaService.cadastraVenda(vendas.get(0)));
-    }
-
-    // TODO: fazer o "RestricaoVendaFactory" funcionar com o mockStatic
-    @Test
-    public void canNotAddVendaWithLargerQuantity(){
-        // GIVEN
-
-        // WHEN
-        for (ItemCarrinho produto : itensCarrinho1) {
-            when(estoqueService.podeVender(produto.getCodProduto(), produto.getQuantidade())).thenReturn(false);
-        }
-
-        // THEN
-        assertEquals(2, vendaService.cadastraVenda(vendas.get(0)));
-    }
-
     @Test
     public void returnAllValuesOfVenda() throws URISyntaxException, IOException, InterruptedException {
         // GIVEN
@@ -163,6 +118,32 @@ public class VendaServiceTest {
         assertEquals(values[3], response[3]);
     }
 
+    //TODO: Fazer
+    @Test
+    public void returnAllValuesOfVendaWithWrongAddress() throws URISyntaxException, IOException, InterruptedException {
+        // GIVEN
+        String endereco = "trabass";
+        Integer[] values = new Integer[4];
+        int subtotal = 20;
+        int imposto = subtotal * 12 / 100;
+        int frete = 0;
+        values[0] = subtotal;
+        values[1] = imposto;
+        values[2] = subtotal + imposto + frete;
+        values[3] = frete;
+
+        // WHEN
+        when(calculoImposto.calculaImposto(itensCarrinho1)).thenReturn(imposto);
+        when(calculoFrete.calculaFrete("portoalegre", endereco)).thenReturn((double) frete);
+
+        // THEN
+        Integer[] response  = vendaService.consultaVenda(itensCarrinho1, endereco);
+        assertEquals(values[0], response[0]);
+        assertEquals(values[1], response[1]);
+        assertEquals(values[2], response[2]);
+        assertEquals(values[3], response[3]);
+    }
+
     @Test
     public void notReturnAllValuesOfVendaWithItemCarrinhoNull(){
         // GIVEN
@@ -180,4 +161,57 @@ public class VendaServiceTest {
         // THEN
         assertEquals(vendas, vendaService.todos());
     }
+
+
+
+
+    // TODO: fazer o "RestricaoVendaFactory" funcionar com o mockStatic
+//    @Test
+//    public void canAddVenda(){
+//        // GIVEN
+////        try (MockedStatic<RestricaoVendaFactory> theMock = Mockito.mockStatic(RestricaoVendaFactory.class)) {
+////            theMock.when(() -> RestricaoVendaFactory.getInstance(LocalTime.now()))
+////                    .thenReturn(HorarioNormal.class);
+////        }
+//
+////        RestricaoVendaFactory restricaoVendaFactory = new RestricaoVendaFactory();
+////        given(RestricaoVendaFactory.getInstance(LocalTime.now())).willReturn(HorarioNormal.class);
+//
+//        // WHEN
+//        for (ItemCarrinho produto : itensCarrinho1) {
+//            when(estoqueService.podeVender(produto.getCodProduto(), produto.getQuantidade())).thenReturn(true);
+//        }
+//
+//        for (ItemCarrinho produto : itensCarrinho1) {
+//            when(estoqueService.getProduto(produto.getCodProduto())).thenReturn(itemEstoque);
+//        }
+//
+//        // THEN
+//        assertEquals(0, vendaService.cadastraVenda(vendas.get(0)));
+//    }
+//
+//    // TODO: fazer o "RestricaoVendaFactory" funcionar com o mockStatic
+//    @Test
+//    public void canNotAddVendaWithInvalidTime(){
+//        // GIVEN
+//
+//        // WHEN
+//
+//        // THEN
+////        assertEquals(1, vendaService.cadastraVenda(vendas.get(0)));
+//    }
+//
+//    // TODO: fazer o "RestricaoVendaFactory" funcionar com o mockStatic
+//    @Test
+//    public void canNotAddVendaWithLargerQuantity(){
+//        // GIVEN
+//
+//        // WHEN
+//        for (ItemCarrinho produto : itensCarrinho1) {
+//            when(estoqueService.podeVender(produto.getCodProduto(), produto.getQuantidade())).thenReturn(false);
+//        }
+//
+//        // THEN
+//        assertEquals(2, vendaService.cadastraVenda(vendas.get(0)));
+//    }
 }
