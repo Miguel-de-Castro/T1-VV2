@@ -95,17 +95,11 @@ async function checkout() {
   let confirmou = await servico.confirmaVenda(itens, inpEndereco.value);
 
   console.log(confirmou);
-  console.log(typeof confirmou);
 
-  if (confirmou === 0) {
+  if (confirmou == 0) {
     saida.vendaSucesso();
-  } else if (confirmou === 1) {
+  } else if (confirmou == 1) {
     saida.horarioInvalido();
-  } else if (confirmou === 2) {
-    saida.estoqueInvalido();
-  } else if (confirmou === 3) {
-    console.log("num3");
-    saida.freteInvalido();
   } else {
     saida.erroInternoDoServidor();
   }
@@ -137,8 +131,7 @@ function bindClear(btn) {
 
 // Inicialização
 async function init() {
-  // servico = new ServicoDeVendas("https://8080-lucashleal-t1projarq-8yykfcppq1a.ws-us44.gitpod.io");
-  servico = new ServicoDeVendas("http://localhost:8080");
+  servico = new ServicoDeVendas("https://8765-migueldecastr-tfprojarq-8qi07cfb0if.ws-us47.gitpod.io");
 
   carrinho = new CarrinhoView(new Carrinho(), carrinhoRoot);
   produtos = new ProdutoListView(servico, produtosRoot);
